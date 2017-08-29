@@ -1,0 +1,14 @@
+<h1>Welcome to Dashboard</h1>
+@{
+    foreach(var user in ViewBag.Users){
+        <p>"@user.UserName"</p>
+    }
+}
+
+<form action="/Logout" method="GET">
+<input type="Submit" value="LOGOUT"> 
+</form>
+
+<form action="/Delete" method="POST">
+<input type="Submit" value="DELETE ACCT!"> 
+</form>
