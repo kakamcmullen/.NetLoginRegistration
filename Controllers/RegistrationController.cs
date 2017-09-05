@@ -116,7 +116,7 @@ namespace Registration.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
-//==========================DELETE USER=========================================//
+//========================DELETE USER===========================================//
         [HttpPost]
         [Route("Delete")]
         public IActionResult Delete()
@@ -127,6 +127,35 @@ namespace Registration.Controllers
                 _context.SaveChanges();
                 HttpContext.Session.Clear();
             return RedirectToAction("Index");
+        }
+//========================UPDATE USER PAGE======================================//
+        [HttpGet]
+        [Route("/UpdateAcct")]
+        public IActionResult UpdateAcct()
+        {
+            int? ValidUser = HttpContext.Session.GetInt32("CurrentUser");
+            if(ValidUser != null)
+            {
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
+//========================UPDATE USER EMAIL, PASSWORD, & USERNAME===============//
+        [HttpPost]
+        [Route("/Update")]
+        public IActionResult Update(UpdateViewModel model)
+        {
+            if(ModelState.IsValid){
+            //update the User in the database
+            int? UpdateUserId = HttpContext.Session.GetInt32("CurrentUser");
+            User UpdateUser = _context.Users.SingleOrDefault(user => user.UserId == UpdateUserId);
+            UpdateUser.UserName = model.UserName;
+            UpdateUser.Email = model.Email;
+            UpdateUser.Password = model.Password;
+            UpdateUser.UpdatedAt = DateTime.Now;
+            _context.SaveChanges();
+            }
+            return RedirectToAction("Dashboard");
         }
     }
 }
